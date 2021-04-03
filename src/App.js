@@ -15,12 +15,16 @@ import Preloader from "./components/common/Preloader";
 import store from "./redux/redux-store";
 import Nav from "./components/Nav/Nav";
 import {useEffect} from "react";
+import {getAuthUserDataThunkCreator} from "./redux/auth-reducer";
 
 const App = (props) => {
 
-    const {initialized, initializeApp} = props;
+    const {initialized, initializeApp, getAuthUserDataThunkCreator} = props;
 
-    useEffect(() => initializeApp(), []);
+    useEffect(() => {
+        initializeApp();
+        getAuthUserDataThunkCreator();
+    }, []);
 
     if (!initialized) {
         return <Preloader/>
@@ -56,7 +60,7 @@ const mapStateToProps = (state) => ({
     initialized: state.app.initialized
 })
 
-const AppContainer = connect(mapStateToProps, {initializeApp})(App);
+const AppContainer = connect(mapStateToProps, {initializeApp,getAuthUserDataThunkCreator})(App);
 
 const AppMain = () => {
     return <BrowserRouter>
