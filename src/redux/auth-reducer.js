@@ -54,7 +54,8 @@ export const getAuthUserDataThunkCreator = () => async (dispatch) => {
 
     let response = await headerAuthAPI.getAuthUserData()
     if (response.data.resultCode === 0) {
-        let {id, login, email} = response.data.data
+        let {id, login, email} = response.data.data;
+        localStorage.setItem('userId', id);
         dispatch(setAuthUserData(id, email, login, true));
     }
 }
@@ -78,6 +79,7 @@ export const LogoutUserThunkCreator = () => async (dispatch) => {
 
     let response = await headerAuthAPI.logoutUser()
     if (response.data.resultCode === 0) {
+        localStorage.removeItem('userId');
         dispatch(setAuthUserData(null, null, null, false));
     }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Redirect} from "react-router-dom";
 import {connect} from "react-redux";
 
@@ -7,14 +7,12 @@ let mapStateForRedirectToProps = (state) => {
         isAuth: state.auth.isAuth,
     }
 }
-
 export const withAuthRedirect = (Component) => {
-    class RedirectComponent extends React.Component {
-        render() {
-            if(!this.props.isAuth) return <Redirect to={"/login"}/>
-            return <Component {...this.props}/>
-        }
+
+    const RedirectComponent = (props) => {
+        const isAuthLocalStorage = localStorage.getItem('userId');
+        if (!props.isAuth && !isAuthLocalStorage) return <Redirect to={"/login"}/>
+        return <Component {...props}/>
     }
-     let ConnectedAuthRedirectComponent = connect(mapStateForRedirectToProps)(RedirectComponent);
-    return ConnectedAuthRedirectComponent;
+    return connect(mapStateForRedirectToProps)(RedirectComponent);
 }
