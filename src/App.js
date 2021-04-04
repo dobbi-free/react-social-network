@@ -19,12 +19,11 @@ import {getAuthUserDataThunkCreator} from "./redux/auth-reducer";
 
 const App = (props) => {
 
-    const {initialized, initializeApp, getAuthUserDataThunkCreator} = props;
+    const {initialized, initializeApp, } = props;
 
     useEffect(() => {
         initializeApp();
-        getAuthUserDataThunkCreator();
-    }, []);
+            }, []);
 
     if (!initialized) {
         return <Preloader/>

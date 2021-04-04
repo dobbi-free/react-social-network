@@ -1,7 +1,7 @@
 import {headerAuthAPI, usersAPI} from "../api/api";
 import {setIsFetching, setTotalUserCount, setUsers} from "./users-reducer";
 import {stopSubmit} from "redux-form";
-import {setAuthUserData} from "./auth-reducer";
+import {getAuthUserDataThunkCreator, setAuthUserData} from "./auth-reducer";
 
 const INITALIZED_SUCCESS = 'INITALIZED_SUCCESS';
 
@@ -31,7 +31,7 @@ export const initializedSuccess = () => {
 }
 
 export const initializeApp = () => (dispatch) => {
-    let promise = dispatch(setAuthUserData());
+    let promise = dispatch(getAuthUserDataThunkCreator());
     Promise.all([promise])
         .then(() => {
             dispatch(initializedSuccess());
