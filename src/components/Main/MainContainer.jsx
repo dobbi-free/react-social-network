@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     getStatusMainThunkCreator,
     getUsersMainThunkCreator, profileDataSaveThunkCreator, savePhotoThunkCreator,
@@ -11,34 +11,28 @@ import {withRouter} from "react-router-dom";
 import {withAuthRedirect} from "../../hoc/AuthRedirect";
 import {compose} from "redux";
 
-class MainContainer extends React.Component {
+const MainContainer = (props) => {
+    const {main, status, authorizedUserId, updateStatusMainThunkCreator, getUsersMainThunkCreator, getStatusMainThunkCreator, profileDataSaveThunkCreator, savePhotoThunkCreator} = props
+    let userId = props.match.params.userId
+    const refreshMain = () => {
 
-    refreshMain() {
-        let userId = this.props.match.params.userId
         if (!userId) {
-            userId = this.props.authorizedUserId
+            userId = authorizedUserId
         }
-        this.props.getUsersMainThunkCreator(userId)
-        this.props.getStatusMainThunkCreator(userId)
+        getUsersMainThunkCreator(userId)
+        getStatusMainThunkCreator(userId)
     }
 
-    componentDidMount() {
-        this.refreshMain()
-    }
+    useEffect(() => refreshMain(), [userId]);
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.match.params.userId != prevProps.match.params.userId)
-            this.refreshMain()
-    }
 
-    render() {
-        return (
-            <Main  {...this.props} profileDataSaveThunkCreator={this.props.profileDataSaveThunkCreator}
-                   savePhotoThunkCreator={this.props.savePhotoThunkCreator} main={this.props.main}
-                   status={this.props.status}
-                   updateStatus={this.props.updateStatusMainThunkCreator} isOwner={!this.props.match.params.userId}/>
-        )
-    }
+    return (
+        <Main  {...props} profileDataSaveThunkCreator={profileDataSaveThunkCreator}
+               savePhotoThunkCreator={savePhotoThunkCreator} main={main}
+               status={status}
+               updateStatus={updateStatusMainThunkCreator} isOwner={!userId}/>
+    )
+
 }
 
 let mapStateToProps = (state) => ({
