@@ -1,32 +1,28 @@
 import s from "./Login.module.css";
-import LoginForm from "./LoginForm";
 import LoginReduxForm from "./LoginForm";
-import {connect} from "react-redux";
-import {LoginUserThunkCreator} from "../../redux/auth-reducer";
-import React from 'react';
-import {Redirect} from "react-router-dom";
+import { connect } from "react-redux";
+import { getCaptchaUrl, LoginUserThunkCreator } from "../../redux/auth-reducer";
+import React, { useContext } from "react";
+import { Redirect } from "react-router-dom";
+import {headerAuthAPI, securityAPI} from "../../api/api";
+import { stopSubmit } from "redux-form";
+import { GlobalContext } from "../../context/globalContext";
 
 const Login = (props) => {
-    let onSubmit = (formData) => {
-        props.LoginUserThunkCreator(formData.email,formData.password,formData.rememberMe,formData.captcha)
-    }
-
-    if(props.isAuth){
-      return  <Redirect to={'/main'}/>
-    }
-    return (
-        <div>
-            <h1 className={s.title}>Login</h1>
-            <LoginReduxForm captchaUrl={props.captchaUrl} onSubmit={onSubmit}/>
-        </div>
-    );
-
-}
-
-const mapStateToProps = (state) => ({
-    isAuth: state.auth.isAuth,
-    captchaUrl: state.auth.captchaUrl
-})
+  const { store, constants } = useContext(GlobalContext);
 
 
-export default connect(mapStateToProps, {LoginUserThunkCreator,})(Login);
+
+  if (store.state.isAuth) {
+    return <Redirect to={"/main"} />;
+  }
+  return (
+    <div>
+      <h1 className={s.title}>Login</h1>
+      <LoginReduxForm captchaUrl={store.state.captchaUrl} />
+    </div>
+  );
+};
+
+
+export default Login;

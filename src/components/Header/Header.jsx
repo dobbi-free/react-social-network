@@ -19,7 +19,7 @@ function Header(props) {
                     <h1 className={s.title}>React</h1>
                     <div className={s.login_block}>
                         {!props.isAuth ?
-                            <NavLink to={"/login"} activeClassName={nav.active} className={nav.link}>Login</NavLink> : <div><h2>{props.login}</h2>  <button className={nav.button_logout}  onClick={props.LogoutUserThunkCreator}>Logout</button></div>
+                            <NavLink to={"/login"} activeClassName={nav.active} className={nav.link}>Login</NavLink> : <div><h2>{props.login}</h2>  <button className={nav.button_logout}  onClick={props.logout}>Logout</button></div>
                             }
                     </div>
                 </div>

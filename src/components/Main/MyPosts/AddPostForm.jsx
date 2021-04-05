@@ -1,4 +1,3 @@
-import s from './MyPosts.module.css';
 import common from '../../common/Common.module.css';
 import React from 'react';
 import {Field, reduxForm} from "redux-form";
@@ -16,10 +15,8 @@ const AddPostForm = (props) => {
     );
 }
 
-const AddPostFormRedux = reduxForm({
-
+export default  reduxForm({
     form: 'profileAddPostForm'
 })(AddPostForm)
 
 
-export default AddPostFormRedux;

@@ -1,8 +1,7 @@
 import s from './MyPosts.module.css';
 import Posts from "./Posts/Posts";
 import React from 'react';
-import {addPostActionCreator, updateInputActionCreator} from "../../../redux/main-reducer";
-import AddPostFormRedux from "./AddPostForm.jsx";
+import AddPostForm from "./AddPostForm";
 
 
 const MyPosts = React.memo(props => {
@@ -16,7 +15,7 @@ const MyPosts = React.memo(props => {
     return (
         <div className={s.posts}>
             <h3 className={s.title}>My Posts</h3>
-            <AddPostFormRedux onSubmit={addNewPost}/>
+            <AddPostForm onSubmit={addNewPost}/>
             <div className={s.posts_list}>
                 {postsElements}
             </div>

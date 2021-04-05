@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { useContext } from "react";
 import Header from "./Header";
-import {connect} from "react-redux";
-import {LogoutUserThunkCreator} from "../../redux/auth-reducer";
+import { GlobalContext } from "../../context/globalContext";
+import {headerAuthAPI} from "../../api/api";
 
-const  HeaderContainer = (props) => {
-    return (
-        <Header {...props}/>
-    );
-}
+const HeaderContainer = () => {
+  const { store, constants } = useContext(GlobalContext);
 
-const mapStateToProps = (state) => ({
-    isAuth: state.auth.isAuth,
-    login: state.auth.login,
+  const logout = async () => {
+    store.dispatch({ type: constants.LOADING_ACTION, loading: true });
+    let response = await headerAuthAPI.logoutUser();
+    if (response.data.resultCode === 0) {
+      localStorage.removeItem("userId");
+      store.dispatch({
+        type: constants.SET_USER_DATA,
+        data: { userId: null, email: null, login: null, isAuth: false },
+      });
+    }
+    store.dispatch({ type: constants.LOADING_ACTION, loading: false });
+  };
 
-})
+  return (
+    <Header
+      isAuth={store.state.isAuth}
+      login={store.state.login}
+      logout={logout}
+    />
+  );
+};
 
-export default connect(mapStateToProps, {LogoutUserThunkCreator})(HeaderContainer);
+export default HeaderContainer;
