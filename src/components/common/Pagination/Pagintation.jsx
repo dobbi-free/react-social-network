@@ -1,11 +1,12 @@
 import s from "./Pagionation.module.css";
-import {useState} from "react";
+import {useContext, useState} from "react";
+import {GlobalContext} from "../../../context/globalContext";
 
 const Pagintaion = (props) => {
+    const { store, constants } = useContext(GlobalContext);
 
 
-
-    let pagesCount = Math.ceil(props.totalItemsCount / props.pageSize)
+    let pagesCount = Math.ceil(store.state.totalUserCount / store.state.pageSize)
     let pages = [];
     for (let i = 1; i <= pagesCount; i++)
         pages.push(i);
@@ -19,9 +20,10 @@ const Pagintaion = (props) => {
             {portionNumber > 1 && <button className={s.button_prev} onClick={() => {setPortionNumber(portionNumber - 1)}}> > </button>}
 
             {pages.filter(p => p >= leftPortionPageNumber && p <= rightPortionNumber).map(p => {
-                return <span onClick={(e) => {
+
+                return <span  onClick={(e) => {
                     props.onPageChanged(p)
-                }} className={props.currentPage === p ? s.selected_page : s.page_item}>{p}</span>
+                }} className={store.state.currentPage === p ? s.selected_page : s.page_item}>{p}</span>
             })}
 
             {portionCount > portionNumber &&  <button className={s.button} onClick={() => {setPortionNumber(portionNumber + 1)}}> > </button>}
