@@ -1,74 +1,79 @@
-import React, {useEffect} from "react";
-import {connect} from "react-redux";
-import {follow, getUsersThunkCreator, setCurrentPage, setIsFollowing, unfollow,} from "../../redux/users-reducer";
+import React, { useContext, useEffect } from "react";
+import { setIsFollowing } from "../../redux/users-reducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader";
-import {withAuthRedirect} from "../../hoc/AuthRedirect";
-import {compose} from "redux";
-import {
-    getCurrentPage,
-    getIsFetching,
-    getIsFollowing,
-    getPageSize,
-    getTotalUserCount,
-    getUsers
-} from "../../redux/selectors/users-selectors";
+import { withAuthRedirect } from "../../hoc/AuthRedirect";
+import { compose } from "redux";
+import { GlobalContext } from "../../context/globalContext";
+import { usersAPI } from "../../api/api";
 
 const UsersContainer = (props) => {
+  // const {
+  //   getUsersThunkCreator,
+  //   currentPage,
+  //   isFetching,
+  //   pageSize,
+  //   setCurrentPage,
+  //   totalUserCount,
+  //   users,
+  //   unfollow,
+  //   follow,
+  //   isFollowing,
+  //   setIsFollowing,
+  // } = props;
 
-    const {getUsersThunkCreator, currentPage,isFetching, pageSize,setCurrentPage,totalUserCount,users,unfollow,follow,isFollowing,setIsFollowing} = props;
+  const { store, constants } = useContext(GlobalContext);
 
-    useEffect(() => {
-        getUsersThunkCreator(currentPage,pageSize)
-    }, []);
+  const getUsersThunkCreator = async (currentPage) => {
+    store.dispatch({ type: constants.TOGGLE_IS_FETCHING, isFetching: true });
+    store.dispatch({
+      type: constants.SET_CURRENT_PAGE,
+      currentPage: currentPage || store.state.currentPage,
+    });
+    let data = await usersAPI.getUsers(currentPage, store.state.pageSize);
 
+    store.dispatch({ type: constants.TOGGLE_IS_FETCHING, isFetching: false });
+    store.dispatch({ type: constants.SET_USERS, users: data.items });
+    store.dispatch({
+      type: constants.SET_TOTAL_USER_COUNT,
+      totalUserCount: data.totalCount,
+    });
+  };
 
-    const onPageChanged = (pageNumber) => {
+  useEffect(() => {
+    getUsersThunkCreator(store.state.currentPage);
+  }, []);
 
-       getUsersThunkCreator(pageNumber, pageSize);
-       setCurrentPage(pageNumber);
-    }
+  const onPageChanged = (currentPage) => {
+    getUsersThunkCreator(currentPage);
+  };
 
+  return (
+    <>
+      {store.state.isFetching ? <Preloader /> : null}
 
-
-
-
-
-
-        return <>
-            {isFetching ? <Preloader/> : null}
-            <Users users={users} unfollow={unfollow} follow={follow}
-                   totalUserCount={totalUserCount}
-                   pageSize={pageSize}
-                   onPageChanged={onPageChanged}
-                   currentPage={currentPage}
-                   isFollowing={isFollowing}
-                   setIsFollowing={setIsFollowing}/>
-        </>
-
-
-
-}
-
+      <Users
+        onPageChanged={onPageChanged}
+        isFollowing={store.state.isFollowing}
+        setIsFollowing={setIsFollowing}
+      />
+    </>
+  );
+};
 let mapStateToProps = (state) => {
-    return {
-        users: getUsers(state),
-        pageSize: getPageSize(state),
-        totalUserCount: getTotalUserCount(state),
-        currentPage: getCurrentPage(state),
-        isFetching: getIsFetching(state),
-        isFollowing: getIsFollowing(state),
-    }
-}
-
+  return {
+    // users: getUsers(state),
+    // pageSize: getPageSize(state),
+    // totalUserCount: getTotalUserCount(state),
+    // currentPage: getCurrentPage(state),
+    // // isFetching: getIsFetching(state),
+    // isFollowing: getIsFollowing(state),
+  };
+};
 
 export default compose(
-    connect(mapStateToProps, {
-        follow,
-        unfollow,
-        setCurrentPage,
-        setIsFollowing,
-        getUsersThunkCreator,
-    }),
-    withAuthRedirect,
-)(UsersContainer)
+    // follow,
+    // unfollow,
+    // setIsFollowing,
+  withAuthRedirect
+)(UsersContainer);
