@@ -1,22 +1,34 @@
-import common from '../../common/Common.module.css';
-import React from 'react';
-import {Field, reduxForm} from "redux-form";
-import {maxLengthCreator, required} from "../../../utils/validator";
-import {Textarea} from "../../common/FormControl";
+import common from "../../common/Common.module.css";
+import s from "./MyPosts.module.css";
+import React, { useContext, useState } from "react";
+import { GlobalContext } from "../../../context/globalContext";
 
-const maxLength10 = maxLengthCreator(10);
+const AddPostForm = () => {
+  const { store, constants } = useContext(GlobalContext);
+  const [post, setPost] = useState(null);
+  const addPost = (post) => {
+    store.dispatch({ type: constants.ADD_POST, newPostBody: post });
+  };
 
-const AddPostForm = (props) => {
-    return (
-        <form onSubmit={props.handleSubmit}>
-            <Field name={"newPostBody"}  component={Textarea} validate={[required,maxLength10]}/>
-            <button className={common.button}>Send</button>
-        </form>
-    );
-}
+  const onChange = (e) => {
+    setPost(e.target.value);
+  };
 
-export default  reduxForm({
-    form: 'profileAddPostForm'
-})(AddPostForm)
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        addPost(post);
+      }}
+    >
+      <textarea
+        onChange={onChange}
+        className={s.textarea_post}
+        name={"newPostBody"}
+      />
+      <button className={common.button}>Send</button>
+    </form>
+  );
+};
 
-
+export default AddPostForm;

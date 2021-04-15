@@ -1,68 +1,60 @@
-import React, {useContext, useEffect} from "react";
-import {
-  getStatusMainThunkCreator,
-  getUsersMainThunkCreator,
-  profileDataSaveThunkCreator,
-  savePhotoThunkCreator,
-  setUserMain,
-  updateStatusMainThunkCreator,
-} from "../../redux/main-reducer";
-import { connect } from "react-redux";
+import React, { useContext, useEffect } from "react";
 import Main from "./Main";
 import { withRouter } from "react-router-dom";
 import { withAuthRedirect } from "../../hoc/AuthRedirect";
 import { compose } from "redux";
-import {GlobalContext} from "../../context/globalContext";
+import { GlobalContext } from "../../context/globalContext";
+import { mainUserAPI } from "../../api/api";
 
 const MainContainer = (props) => {
   const {
     main,
     status,
     updateStatusMainThunkCreator,
-    getUsersMainThunkCreator,
-    getStatusMainThunkCreator,
     profileDataSaveThunkCreator,
     savePhotoThunkCreator,
   } = props;
-  let userId = props.match.params.userId;
-  const { store } = useContext(GlobalContext);
-  const refreshMain = () => {
+
+  const { store, constants } = useContext(GlobalContext);
+
+  const getUsersMainThunkCreator = async (userId) => {
+    let data = await mainUserAPI.getUserMain(userId);
+
+    store.dispatch({ type: constants.SET_USER_MAIN, main: data });
+  };
+
+  const getStatusMainThunkCreator = async (userId) => {
+    let response = await mainUserAPI.getStatusUserMain(userId);
+    store.dispatch({ type: constants.SET_STATUS, status: response.data });
+  };
+
+  const getMain = () => {
+    let userId = props.match.params.userId;
     if (!userId) {
       userId = store.state.userId;
     }
-    getUsersMainThunkCreator(userId);
-    getStatusMainThunkCreator(userId);
+    if (userId) {
+      getUsersMainThunkCreator(userId);
+      getStatusMainThunkCreator(userId);
+    }
   };
 
-  useEffect(() => refreshMain(), [userId]);
-
+  useEffect(() => getMain(), []);
   return (
     <Main
-      {...props}
       profileDataSaveThunkCreator={profileDataSaveThunkCreator}
       savePhotoThunkCreator={savePhotoThunkCreator}
-      main={main}
-      status={status}
       updateStatus={updateStatusMainThunkCreator}
-      isOwner={!userId}
     />
   );
 };
 
 let mapStateToProps = (state) => ({
-  main: state.mainPage.main,
-  status: state.mainPage.status,
+  // main: state.mainPage.main,
+  // status: state.mainPage.status,
 });
 
 export default compose(
-  connect(mapStateToProps, {
-    setUserMain,
-    getUsersMainThunkCreator,
-    getStatusMainThunkCreator,
-    updateStatusMainThunkCreator,
-    savePhotoThunkCreator,
-    profileDataSaveThunkCreator,
-  }),
   withRouter,
   withAuthRedirect
 )(MainContainer);

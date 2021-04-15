@@ -10,6 +10,11 @@ const SET_TOTAL_USER_COUNT = 'SET_TOTAL_USER_COUNT';
 const TOGGLE_IS_FOLLOWING = 'TOGGLE_IS_FOLLOWING';
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
+const SET_USER_MAIN = 'SET_USER_MAIN';
+const SET_STATUS = 'SET_STATUS';
+const SET_PHOTO = 'SET_PHOTO';
+const ADD_POST = 'ADD-POST';
+const SAVE_MAIN_INFO = 'SAVE_MAIN_INFO';
 
 
 const GlobalContext = React.createContext([{}, () => {}]);
@@ -86,6 +91,34 @@ const GlobalProvider = (props) => {
           isFollowing: action.isFollowing,
 
         }
+      case SET_USER_MAIN :
+        return {
+          ...state,
+          main: action.main
+
+        }
+      case SET_STATUS :
+        return {
+          ...state,
+          status: action.status
+
+        }
+      case SET_PHOTO :
+        return {
+          ...state,
+          main: {...state.main, photos: action.photos}
+
+        }
+      case ADD_POST :
+        return {
+          ...state,
+          posts: [...state.posts, {
+            id: 5,
+            message: action.newPostBody,
+            likeCount: 0,
+          }],
+
+        }
       default:
         return state;
     }
@@ -104,6 +137,16 @@ const GlobalProvider = (props) => {
     totalUserCount: 0,
     pageSize: 5,
     isFollowing: false,
+    main: null,
+    status: "",
+    posts: [
+      {
+        id: 1,
+        message: "Wish we could turn back time To the good old days When our momma sang us to sleepBut now we're stressed out",
+        likeCount: 12
+      },
+      {id: 2, message: "Hello there", likeCount: 14}
+    ],
   });
 
   return (
@@ -123,7 +166,12 @@ const GlobalProvider = (props) => {
           SET_TOTAL_USER_COUNT,
           TOGGLE_IS_FOLLOWING,
           FOLLOW,
-          UNFOLLOW
+          UNFOLLOW,
+          SET_USER_MAIN,
+          SET_STATUS,
+          SET_PHOTO,
+          ADD_POST,
+          SAVE_MAIN_INFO
         },
       }}
     >

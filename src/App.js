@@ -10,7 +10,6 @@ import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
 import { Provider } from "react-redux";
 import Preloader from "./components/common/Preloader";
-import store from "./redux/redux-store";
 import Nav from "./components/Nav/Nav";
 import { useContext, useEffect } from "react";
 import { GlobalContext, GlobalProvider } from "./context/globalContext";
@@ -39,9 +38,9 @@ const App = () => {
     getAuthUserDataThunkCreator();
   }, []);
 
-  // if (store.state.loading) {
-  //   return <Preloader />;
-  // }
+  if (store.state.loading) {
+    return <Preloader />;
+  }
   return (
     <div>
       <HeaderContainer />
@@ -53,7 +52,7 @@ const App = () => {
           <div className="wrapp-content">
             <Switch>
               <Route path="/main/:userId?" render={() => <MainContainer />} />
-              <Route path="/dialogs" render={() => <DialogsContainer />} />
+              {/*<Route path="/dialogs" render={() => <DialogsContainer />} />*/}
               <Route path="/news" render={() => <News />} />
               <Route path="/music" render={() => <Music />} />
               <Route path="/findUsers" render={() => <FindUsersContainer />} />
@@ -71,11 +70,9 @@ const App = () => {
 const AppMain = () => {
   return (
     <BrowserRouter>
-      <Provider store={store}>
         <GlobalProvider>
-          <App state={store.getState()} />
+          <App />
         </GlobalProvider>
-      </Provider>
     </BrowserRouter>
   );
 };

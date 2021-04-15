@@ -1,20 +1,19 @@
-import s from './Main.module.css';
+import s from "./Main.module.css";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import MyPostsContainer from "./MyPosts/MyPostsContainer";
 import React from "react";
-import {updateStatusMainThunkCreator} from "../../redux/main-reducer";
-
+import MyPosts from "./MyPosts/MyPosts";
 
 function Main(props) {
-    return (
-        <main className={s.main}>
-            <ProfileInfo profileDataSaveThunkCreator={props.profileDataSaveThunkCreator}
-                         savePhotoThunkCreator={props.savePhotoThunkCreator} isOwner={props.isOwner} main={props.main}
-                         status={props.status}
-                         updateStatus={props.updateStatus}/>
-            <MyPostsContainer/>
-        </main>
-    );
+  return (
+    <main className={s.main}>
+      <ProfileInfo
+        profileDataSaveThunkCreator={props.profileDataSaveThunkCreator}
+        savePhotoThunkCreator={props.savePhotoThunkCreator}
+        updateStatus={props.updateStatus}
+      />
+      <MyPosts />
+    </main>
+  );
 }
 
 export default Main;
