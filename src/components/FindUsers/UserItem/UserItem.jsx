@@ -2,41 +2,33 @@ import s from "./../FindUsers.module.css";
 import { NavLink } from "react-router-dom";
 import { GlobalContext } from "../../../context/globalContext";
 import { usersAPI } from "../../../api/api";
-import {
-  followSucces,
-  setIsFollowing,
-  unfollowSucces,
-} from "../../../redux/users-reducer";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 const UserItem = (props) => {
   const { store, constants } = useContext(GlobalContext);
 
   const follow = async (userId) => {
-    if (followed) {
+    if (props.followed) {
       let response = await usersAPI.unfollow(userId);
 
       if (response.data.resultCode === 0) {
-        store.dispatch({ types: constants.UNFOLLOW, userId: userId });
-        setFollowed(false);
+        store.dispatch({ type: constants.UNFOLLOW, userId: userId });
+        //setFollowed(false);
       }
     } else {
       let response = await usersAPI.follow(userId);
 
       if (response.data.resultCode === 0) {
-        store.dispatch({ types: constants.FOLLOW, userId: userId });
-        setFollowed(true);
+        store.dispatch({ type: constants.FOLLOW, userId: userId });
+        //setFollowed(true);
       }
     }
   };
-
-  const [followed, setFollowed] = useState(props.followed);
 
   return (
     <div className={s.user_item}>
       <div className={s.img_block}>
         <NavLink to={"/main/" + props.id}>
-          {" "}
           <img
             className={s.img}
             src={
@@ -53,7 +45,7 @@ const UserItem = (props) => {
           }}
           className={s.button_follow}
         >
-          {followed ? "Unfollow" : "Follow"}
+          {props.followed ? "Unfollow" : "Follow"}
         </button>
       </div>
       <div className={s.info_block}>

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import { setIsFollowing } from "../../redux/users-reducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader";
 import { withAuthRedirect } from "../../hoc/AuthRedirect";
@@ -55,7 +54,6 @@ const UsersContainer = (props) => {
       <Users
         onPageChanged={onPageChanged}
         isFollowing={store.state.isFollowing}
-        setIsFollowing={setIsFollowing}
       />
     </>
   );

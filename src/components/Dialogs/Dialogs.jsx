@@ -8,10 +8,10 @@ import AddMessageFormRedux from "./AddMessageForm";
 
 const Dialogs = (props) => {
 
-    let dialogsElements = props.state.dialogs.map(dialog => <DialogsItem src={dialog.src} name={dialog.name}
+    let dialogsElements = props.state.dialogs.map((dialog,index) => <DialogsItem key={index} src={dialog.src} name={dialog.name}
                                                                          id={dialog.id}/>);
 
-    let messageElements = props.state.messages.map(message => <MessageItem src={message.src}
+    let messageElements = props.state.messages.map((message,index) => <MessageItem key={index} src={message.src}
                                                                            message={message.message}/>)
 
     if (props.isAuth == false) return <Redirect to={"/login"}/>

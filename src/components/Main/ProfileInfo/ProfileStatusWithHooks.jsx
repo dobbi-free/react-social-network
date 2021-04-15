@@ -1,9 +1,21 @@
-import React, {useEffect, useState} from "react";
-import s from './ProfileInfo.module.css';
+import React, { useContext, useState } from "react";
+import s from "./ProfileInfo.module.css";
+import { GlobalContext } from "../../../context/globalContext";
+import { mainUserAPI } from "../../../api/api";
 
 const ProfileStatusWithHooks = (props) => {
+    const { store, constants } = useContext(GlobalContext);
     let [editMode, setEditMode] = useState(false)
-    let [status, setStatus] = useState(props.status)
+    let [status, setStatus] = useState(store.state.status)
+
+    const updateStatusMainThunkCreator = async (status) => {
+
+        let response = await mainUserAPI.updateStatusUserMain(status)
+        if (response.data.resultCode === 0) {
+            store.dispatch({type: constants.SET_STATUS,status});
+        }
+
+    }
 
     let activateEditMode = () => {
         setEditMode(true)
@@ -11,21 +23,19 @@ const ProfileStatusWithHooks = (props) => {
 
     let disabledEditMode = () => {
         setEditMode(false)
-        props.updateStatus(status)
+        updateStatusMainThunkCreator(status)
+
     }
 
     let onStatusChange = (e) => {
         setStatus(e.currentTarget.value)
     }
-
-    useEffect(() => {
-        setStatus(props.status)
-    },[props.status])
+    
     return (
         <div>
             {!editMode &&
             <p className={s.status} onClick={activateEditMode}
-            >Status : {props.status ? props.status : "Status:"}</p>
+            >Status : {store.state.status ? store.state.status : "Status:"}</p>
             }
             {editMode &&
             <input className={s.status_input} autoFocus={true} onBlur={disabledEditMode}

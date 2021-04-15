@@ -75,3 +75,42 @@ export const CustomInput = (props) => {
     </>
   );
 };
+
+export const ProfileInput = (props) => {
+  const { name, setFormState, formState, type } = props;
+
+  const onChange = (e) => {
+    type === "checkbox"
+      ? setFormState({ ...formState, [name]: e.currentTarget.checked })
+      : setFormState({
+          ...formState,
+          [name]: e.target.value,
+        });
+  };
+
+  return (
+    <>
+      <input onChange={onChange} value={formState[name]} {...props} />
+    </>
+  );
+};
+
+export const ProfileContactsInput = (props) => {
+  const { name, setFormState, formState } = props;
+
+  const onChange = (e) => {
+    setFormState({
+      ...formState,
+      contacts: {
+          ...formState.contacts,
+        [name]: e.target.value,
+      },
+    });
+  };
+
+  return (
+    <>
+      <input onChange={onChange} value={formState.contacts[name]} {...props} />
+    </>
+  );
+};
