@@ -4,44 +4,36 @@ import common from "../../common/Common.module.css";
 import { mainUserAPI } from "../../../api/api";
 import { GlobalContext } from "../../../context/globalContext";
 import { ProfileContactsInput, ProfileInput } from "../../common/FormControl";
+import { iMain } from "../../../interfaces";
 
-const ProfileDataForm = (props) => {
+interface ProfileDataFormProps {
+  main: iMain;
+  setEditMode: (editMode: boolean) => void;
+  error?: string;
+}
+
+const ProfileDataForm = (props: ProfileDataFormProps) => {
   const { store, constants } = useContext(GlobalContext);
-  const [formState, setFormState] = useState({
-    fullName: store.state.main.fullName,
-    lookingForAJob: store.state.main.lookingForAJob,
-    lookingForAJobDescription: store.state.main.lookingForAJobDescription,
-    aboutMe: store.state.main.aboutMe,
-    contacts: {
-      github: store.state.main.contacts.github,
-      vk: store.state.main.contacts.vk,
-      facebook: store.state.main.contacts.facebook,
-      instagram: store.state.main.contacts.instagram,
-      twitter: store.state.main.contacts.twitter,
-      website: store.state.main.contacts.website,
-      youtube: store.state.main.contacts.youtube,
-      mainLink: store.state.main.contacts.mainLink,
-    },
-  });
+  const [formState, setFormState] = useState(null);
 
-  const getUsersMainThunkCreator = async (userId) => {
+  const getUsersMainThunkCreator = async (userId: string) => {
     let data = await mainUserAPI.getUserMain(userId);
     store.dispatch({ type: constants.SET_USER_MAIN, main: data });
   };
 
   const profileDataSaveThunkCreator = async (
-    fullName,
-    lookingForAJob,
-    lookingForAJobDescription,
-    aboutMe,
-    github,
-    vk,
-    facebook,
-    instagram,
-    twitter,
-    website,
-    youtube,
-    mainLink
+    fullName: string,
+    lookingForAJob: boolean,
+    lookingForAJobDescription: string,
+    aboutMe: string,
+    github: string,
+    vk: string,
+    facebook: string,
+    instagram: string,
+    twitter: string,
+    website: string,
+    youtube: string,
+    mainLink: string
   ) => {
     const userId = store.state.userId;
 
@@ -60,7 +52,7 @@ const ProfileDataForm = (props) => {
       mainLink
     );
     if (response.data.resultCode === 0) {
-      store.dispatch(getUsersMainThunkCreator(userId));
+      getUsersMainThunkCreator(userId);
       setFormState({
         ...formState,
         contacts: {

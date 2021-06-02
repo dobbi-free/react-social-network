@@ -2,28 +2,13 @@ import React, { useContext, useEffect } from "react";
 import Users from "./Users";
 import Preloader from "../common/Preloader";
 import { withAuthRedirect } from "../../hoc/AuthRedirect";
-import { compose } from "redux";
 import { GlobalContext } from "../../context/globalContext";
 import { usersAPI } from "../../api/api";
 
-const UsersContainer = (props) => {
-  // const {
-  //   getUsersThunkCreator,
-  //   currentPage,
-  //   isFetching,
-  //   pageSize,
-  //   setCurrentPage,
-  //   totalUserCount,
-  //   users,
-  //   unfollow,
-  //   follow,
-  //   isFollowing,
-  //   setIsFollowing,
-  // } = props;
-
+const UsersContainer = () => {
   const { store, constants } = useContext(GlobalContext);
 
-  const getUsersThunkCreator = async (currentPage) => {
+  const getUsersThunkCreator = async (currentPage: number) => {
     store.dispatch({ type: constants.TOGGLE_IS_FETCHING, isFetching: true });
     store.dispatch({
       type: constants.SET_CURRENT_PAGE,
@@ -43,35 +28,16 @@ const UsersContainer = (props) => {
     getUsersThunkCreator(store.state.currentPage);
   }, []);
 
-  const onPageChanged = (currentPage) => {
+  const onPageChanged = (currentPage: number) => {
     getUsersThunkCreator(currentPage);
   };
 
   return (
     <>
       {store.state.isFetching ? <Preloader /> : null}
-
-      <Users
-        onPageChanged={onPageChanged}
-        isFollowing={store.state.isFollowing}
-      />
+      <Users onPageChanged={onPageChanged} />
     </>
   );
 };
-let mapStateToProps = (state) => {
-  return {
-    // users: getUsers(state),
-    // pageSize: getPageSize(state),
-    // totalUserCount: getTotalUserCount(state),
-    // currentPage: getCurrentPage(state),
-    // // isFetching: getIsFetching(state),
-    // isFollowing: getIsFollowing(state),
-  };
-};
 
-export default compose(
-    // follow,
-    // unfollow,
-    // setIsFollowing,
-  withAuthRedirect
-)(UsersContainer);
+export default withAuthRedirect(UsersContainer);

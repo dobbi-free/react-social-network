@@ -5,7 +5,7 @@ import AddPostForm from "./AddPostForm";
 import {GlobalContext} from "../../../context/globalContext";
 
 
-const MyPosts = (props) => {
+const MyPosts = () => {
     const { store, constants } = useContext(GlobalContext);
     let postsElements = store.state.posts.map(posts => <Posts key={posts.id} message={posts.message} likeCount={posts.likeCount}/>)
 

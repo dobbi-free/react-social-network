@@ -3,14 +3,10 @@ import ProfileInfo from "./ProfileInfo/ProfileInfo";
 import React from "react";
 import MyPosts from "./MyPosts/MyPosts";
 
-function Main(props) {
+function Main() {
   return (
     <main className={s.main}>
-      <ProfileInfo
-        profileDataSaveThunkCreator={props.profileDataSaveThunkCreator}
-        savePhotoThunkCreator={props.savePhotoThunkCreator}
-        updateStatus={props.updateStatus}
-      />
+      <ProfileInfo/>
       <MyPosts />
     </main>
   );

@@ -3,14 +3,15 @@ import s from "./MyPosts.module.css";
 import React, { useContext, useState } from "react";
 import { GlobalContext } from "../../../context/globalContext";
 
+
 const AddPostForm = () => {
   const { store, constants } = useContext(GlobalContext);
   const [post, setPost] = useState(null);
-  const addPost = (post) => {
+  const addPost = (post:string) => {
     store.dispatch({ type: constants.ADD_POST, newPostBody: post });
   };
 
-  const onChange = (e) => {
+  const onChange = (e:React.ChangeEvent<HTMLTextAreaElement>): void  => {
     setPost(e.target.value);
   };
 

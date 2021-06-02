@@ -1,7 +1,7 @@
 import s from './Nav.module.css';
 import {NavLink} from "react-router-dom";
 import React from "react";
-function Nav(props) {
+function Nav() {
     return(
         <nav className={s.nav}>
             <ul className={s.list}>

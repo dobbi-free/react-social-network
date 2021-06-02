@@ -3,12 +3,13 @@ import s from "./ProfileInfo.module.css";
 import { GlobalContext } from "../../../context/globalContext";
 import { mainUserAPI } from "../../../api/api";
 
-const ProfileStatusWithHooks = (props) => {
+
+const ProfileStatusWithHooks = () => {
     const { store, constants } = useContext(GlobalContext);
     let [editMode, setEditMode] = useState(false)
     let [status, setStatus] = useState(store.state.status)
 
-    const updateStatusMainThunkCreator = async (status) => {
+    const updateStatusMainThunkCreator = async (status:string) => {
 
         let response = await mainUserAPI.updateStatusUserMain(status)
         if (response.data.resultCode === 0) {
@@ -27,7 +28,7 @@ const ProfileStatusWithHooks = (props) => {
 
     }
 
-    let onStatusChange = (e) => {
+    let onStatusChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setStatus(e.currentTarget.value)
     }
     

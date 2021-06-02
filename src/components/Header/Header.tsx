@@ -2,7 +2,13 @@ import s from "./Header.module.css";
 import nav from "../Nav/Nav.module.css";
 import { NavLink } from "react-router-dom";
 
-function Header(props) {
+interface HeaderTypesProps {
+  isAuth:boolean;
+  login:string;
+  logout:()=>void
+}
+
+function Header(props:HeaderTypesProps) {
   return (
     <header className={s.header}>
       <div className="container">
@@ -30,7 +36,7 @@ function Header(props) {
               </NavLink>
             ) : (
               <div>
-                <h2>{props.login}</h2>{" "}
+                <h2>{props.login}</h2>
                 <button className={nav.button_logout} onClick={props.logout}>
                   Logout
                 </button>

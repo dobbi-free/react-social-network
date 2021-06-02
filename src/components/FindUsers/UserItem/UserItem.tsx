@@ -4,10 +4,20 @@ import { GlobalContext } from "../../../context/globalContext";
 import { usersAPI } from "../../../api/api";
 import { useContext } from "react";
 
-const UserItem = (props) => {
+interface UserItemPropsTypes {
+  followed:boolean;
+  isFollowing:boolean;
+  id:string;
+  src:string;
+  name:string;
+  status:string;
+  location:string;
+}
+
+const UserItem = (props:UserItemPropsTypes) => {
   const { store, constants } = useContext(GlobalContext);
 
-  const follow = async (userId) => {
+  const follow = async (userId:string) => {
     if (props.followed) {
       let response = await usersAPI.unfollow(userId);
 

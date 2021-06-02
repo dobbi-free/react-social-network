@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { GlobalContext } from "../../context/globalContext";
 
-const Login = (props) => {
+const Login = () => {
   const { store, constants } = useContext(GlobalContext);
 
   if (store.state.isAuth) {

@@ -7,11 +7,11 @@ import ProfileDataForm from "./ProfileDataForm";
 import { GlobalContext } from "../../../context/globalContext";
 import { mainUserAPI } from "../../../api/api";
 
-const ProfileInfo = (props) => {
+const ProfileInfo = () => {
   const { store, constants } = useContext(GlobalContext);
   const [editMode, setEditMode] = useState(false);
 
-  const savePhotoThunkCreator = async (file) => {
+  const savePhotoThunkCreator = async (file:File) => {
     let response = await mainUserAPI.savePhoto(file);
     if (response.data.resultCode === 0) {
       store.dispatch({
@@ -25,8 +25,8 @@ const ProfileInfo = (props) => {
     return <Preloader />;
   }
 
-  const onMainPhotoSelected = (e) => {
-    if (e.target.files.length) {
+  const onMainPhotoSelected = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if (e!.target.files.length) {
       savePhotoThunkCreator(e.target.files[0]);
     }
   };
@@ -50,7 +50,7 @@ const ProfileInfo = (props) => {
         <div className={s.info}>
           <h4 className={s.name}>{editMode || store.state.main.fullName}</h4>
           {editMode || (
-            <ProfileStatusWithHooks updateStatus={props.updateStatus} />
+            <ProfileStatusWithHooks />
           )}
           {editMode ? (
             <ProfileDataForm
@@ -86,7 +86,25 @@ const ProfileInfo = (props) => {
   );
 };
 
-const ProfileData = (props) => {
+export interface ProfileDataProps{
+  main: {
+    aboutMe: string;
+    contacts: {
+      [key:string]: string | null;
+    }
+    lookingForAJob: boolean;
+    lookingForAJobDescription: string;
+    fullName: string;
+    userId: number;
+    photos: {
+      large: string;
+      small: string;
+    }
+  } 
+  goToEditMode:()=>void
+}
+
+const ProfileData = (props:ProfileDataProps) => {
   return (
     <div>
       <ul className={s.list}>
@@ -120,7 +138,12 @@ const ProfileData = (props) => {
   );
 };
 
-export const Contacts = ({ contactTitle, contactValue }) => {
+interface ContactsProps{
+  contactTitle:string
+  contactValue:string
+}
+
+export const Contacts = ({ contactTitle, contactValue }:ContactsProps) => {
   return (
     <div className={s.contact}>
       <div className={s.contact_row}>

@@ -4,23 +4,43 @@ import { CustomInput } from "../common/FormControl";
 import { headerAuthAPI, securityAPI } from "../../api/api";
 import { GlobalContext } from "../../context/globalContext";
 
-const LoginForm = (props) => {
-  const [formState, setFormState] = useState({
+interface iLoginFormProps {
+  captchaUrl: string | null;
+  error?: string;
+}
+
+interface iFormState {
+  email?: string;
+  password?: string;
+  captcha?: string;
+  rememberMe?: boolean;
+}
+
+interface iRequiredPropTypes {
+  email: null | boolean;
+  password: null | boolean;
+}
+
+const LoginForm = (props: iLoginFormProps) => {
+  const [formState, setFormState] = useState<iFormState>({
     email: "",
     password: "",
     captcha: "",
     rememberMe: false,
   });
   const { store, constants } = useContext(GlobalContext);
-  const [locRequired, setRequired] = useState({ email: null, password: null });
+  const [locRequired, setRequired] = useState<iRequiredPropTypes>({
+    email: null,
+    password: null,
+  });
   const [locMinLength, setMinLength] = useState({ password: null });
   const [checked, setChecked] = useState(false);
 
   const LoginUserThunkCreator = async (
-    email,
-    password,
-    rememberMe,
-    captcha
+    email: string,
+    password: string,
+    rememberMe: boolean,
+    captcha: string
   ) => {
     store.dispatch({ type: constants.LOADING_ACTION, loading: true });
     let response = await headerAuthAPI.loginUser(
@@ -64,12 +84,12 @@ const LoginForm = (props) => {
         // !locRequired.email &&
         //   !locRequired.password &&
         //   !locMinLength.password &&
-          LoginUserThunkCreator(
-            formState.email,
-            formState.password,
-            formState.rememberMe,
-            formState.captcha
-          );
+        LoginUserThunkCreator(
+          formState.email,
+          formState.password,
+          formState.rememberMe,
+          formState.captcha
+        );
       }}
       className={s.form}
     >
@@ -102,7 +122,7 @@ const LoginForm = (props) => {
       {props.captchaUrl && (
         <CustomInput
           formState={formState}
-          setFormState
+          setFormState={setFormState}
           name="captcha"
           type="text"
           placeholder="Symbols"

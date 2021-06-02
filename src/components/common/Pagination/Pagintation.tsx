@@ -2,7 +2,12 @@ import s from "./Pagionation.module.css";
 import { useContext, useState } from "react";
 import { GlobalContext } from "../../../context/globalContext";
 
-const Pagintaion = (props) => {
+interface iPaginationProps {
+  portionSize: number;
+  onPageChanged: (currentPage: number) => void;
+}
+
+const Pagintaion = (props: iPaginationProps) => {
   const { store, constants } = useContext(GlobalContext);
 
   let pagesCount = Math.ceil(store.state.totalUserCount / store.state.pageSize);
@@ -21,9 +26,7 @@ const Pagintaion = (props) => {
           onClick={() => {
             setPortionNumber(portionNumber - 1);
           }}
-        >
-          >
-        </button>
+        ></button>
       )}
 
       {pages
@@ -48,10 +51,7 @@ const Pagintaion = (props) => {
           onClick={() => {
             setPortionNumber(portionNumber + 1);
           }}
-        >
-          {" "}
-          >{" "}
-        </button>
+        />
       )}
     </div>
   );

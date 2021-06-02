@@ -1,7 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import s from "./FormControl.module.css";
 
-export const Textarea = ({ input, meta, ...props }) => {
+interface InputPropsTypes {
+  input: string;
+  meta: { [key: string]: any };
+  [key: string]: any;
+}
+
+export const Textarea = ({ input, meta, ...props }: InputPropsTypes) => {
   const hasError = meta.error && meta.touched;
   return (
     <div>
@@ -15,7 +21,7 @@ export const Textarea = ({ input, meta, ...props }) => {
   );
 };
 
-export const InputLogin = ({ input, meta, ...props }) => {
+export const InputLogin = ({ input, meta, ...props }: InputPropsTypes) => {
   const hasError = meta.error && meta.touched;
   return (
     <div>
@@ -33,32 +39,33 @@ export const InputLogin = ({ input, meta, ...props }) => {
   );
 };
 
-export const CustomInput = (props) => {
+interface CustomInputPropTypes {
+  name?: string;
+  setFormState?: (e: { [key: string]: any }) => void;
+  formState?: { [key: string]: any };
+  type?: string;
+  locRequired?: boolean;
+  locMinLength?: number;
+  required?: boolean;
+  placeholder?: string;
+  setRequired?: (required: { email: any; password: any }) => void;
+  setMinLength?: (minLength: { password: null | number }) => void;
+  checked?: boolean;
+  minLength?: number;
+  className?: string;
+}
+
+export const CustomInput = (props: CustomInputPropTypes) => {
   const {
     name,
     setFormState,
     formState,
     type,
-    required = false,
-    minLength = false,
-    checked = false,
     locRequired = null,
-    setRequired = () => {},
     locMinLength = null,
-    setMinLength = () => {},
   } = props;
 
-  // useEffect(() => {
-  //   checked && required && !formState[name].length
-  //     ? setRequired({ ...locRequired, [name]: "Field required" })
-  //     : setRequired({ ...locRequired, [name]: null });
-  //   checked && minLength && formState[name].length <= minLength
-  //     ? setMinLength({ ...locMinLength, [name]: "Minimum 8 char" })
-  //     : setMinLength({ ...locMinLength, [name]: null });
-  //  debugger
-  // }, [formState[name], checked]);
-
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     type === "checkbox"
       ? setFormState({ ...formState, [name]: e.currentTarget.checked })
       : setFormState({
@@ -76,10 +83,10 @@ export const CustomInput = (props) => {
   );
 };
 
-export const ProfileInput = (props) => {
+export const ProfileInput = (props: CustomInputPropTypes) => {
   const { name, setFormState, formState, type } = props;
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     type === "checkbox"
       ? setFormState({ ...formState, [name]: e.currentTarget.checked })
       : setFormState({
@@ -95,14 +102,14 @@ export const ProfileInput = (props) => {
   );
 };
 
-export const ProfileContactsInput = (props) => {
+export const ProfileContactsInput = (props: CustomInputPropTypes) => {
   const { name, setFormState, formState } = props;
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
       contacts: {
-          ...formState.contacts,
+        ...formState.contacts,
         [name]: e.target.value,
       },
     });
