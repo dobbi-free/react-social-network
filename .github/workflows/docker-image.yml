@@ -31,4 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Deploy
-        run: gh-pages -d build       
+        run: |
+          git remote set-url origin https://git:${{ secrets.SEC_TOKEN }}@github.com/react-project.git
+          npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.SEC_TOKEN }}     
