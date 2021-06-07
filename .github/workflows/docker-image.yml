@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install gh-pages
-      run: npm install gh-pages --save-dev
+    - name: Install
+      run: npm install 
       
   build:    
     runs-on: ubuntu-latest
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build
-        run: npm build  
+        run: npm run-script build  
         
   deploy:    
     runs-on: ubuntu-latest
