@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install gh-pages
-      run: npm install gh-pages -g
+      run: npm install gh-pages --global
   build:    
     runs-on: ubuntu-latest
     needs: [install]
