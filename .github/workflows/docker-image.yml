@@ -12,12 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: Set Node.js version
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+            
       - name: Install
-      - uses: actions/setup-node@v2
-      - run: npm install
+        run: npm install
       
       - name: ls  
-      - run: ls -la
+        run: ls -la
     
       
 #   build:    
