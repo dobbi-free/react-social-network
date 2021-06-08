@@ -28,8 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Deploy
-      - run: node --version
-      - run: npm --version
+        run: node --version  npm --version
 #         run: |
 #           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/react-social-network.git
 #           npx gh-pages -d ../build 
