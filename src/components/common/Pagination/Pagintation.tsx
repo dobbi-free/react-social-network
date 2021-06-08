@@ -8,7 +8,7 @@ interface iPaginationProps {
 }
 
 const Pagintaion = (props: iPaginationProps) => {
-  const { store, constants } = useContext(GlobalContext);
+  const { store } = useContext(GlobalContext);
 
   let pagesCount = Math.ceil(store.state.totalUserCount / store.state.pageSize);
   let pages = [];
