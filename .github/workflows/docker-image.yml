@@ -24,10 +24,9 @@ jobs:
         run: npm run build  
         
       - name: Deploy
-        run: ls -la
-     #   run: |
-    #         git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/react-social-network.git
-      #       npx gh-pages -d ../build    
+        run: |
+            git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/react-social-network.git
+            npx gh-pages -d ../build    
     
       
 #   build:    
